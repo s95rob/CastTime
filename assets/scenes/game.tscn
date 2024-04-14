@@ -1,0 +1,432 @@
+[gd_scene load_steps=38 format=3 uid="uid://drbqjvgi1g3f6"]
+
+[ext_resource type="Script" path="res://assets/scripts/PlayerController.cs" id="1_bym5b"]
+[ext_resource type="Texture2D" uid="uid://deoqbjsij66jy" path="res://assets/textures/tiles/background.png" id="1_mgeco"]
+[ext_resource type="Texture2D" uid="uid://ct8kaupeco3be" path="res://assets/textures/tiles/board-tiles.png" id="2_f25os"]
+[ext_resource type="Texture2D" uid="uid://dntxb5rs5506x" path="res://assets/textures/title.png" id="3_f5px6"]
+[ext_resource type="Shader" path="res://assets/shaders/scrolling_texture.gdshader" id="3_g8xuf"]
+[ext_resource type="Texture2D" uid="uid://bybihvx70b140" path="res://assets/textures/tiles/player-cursor.png" id="3_ijoef"]
+[ext_resource type="Script" path="res://assets/scripts/screens/IntroScreen.cs" id="4_brr3i"]
+[ext_resource type="AudioStream" uid="uid://d33uyr6fhsgnf" path="res://assets/audio/move.ogg" id="5_3s0dt"]
+[ext_resource type="Texture2D" uid="uid://dw1t46lsbpnoe" path="res://assets/textures/tiles/portal.png" id="5_agoc4"]
+[ext_resource type="Script" path="res://assets/scripts/LevelController.cs" id="6_2vxaq"]
+[ext_resource type="Texture2D" uid="uid://c4tb51crgeqxf" path="res://assets/textures/tiles/block-tile.png" id="6_c1jvp"]
+[ext_resource type="Script" path="res://assets/scripts/screens/LevelScreen.cs" id="6_mm0xu"]
+[ext_resource type="Script" path="res://assets/scripts/GameStateController.cs" id="8_b4qfm"]
+[ext_resource type="FontFile" uid="uid://c0y7pl6nw3uol" path="res://assets/fonts/alagard.ttf" id="10_ae47x"]
+[ext_resource type="AudioStream" uid="uid://bltyg8ueds15i" path="res://assets/audio/portal.ogg" id="10_k8mqf"]
+[ext_resource type="AudioStream" uid="uid://dtqwp211tjr0r" path="res://assets/audio/timeout.ogg" id="11_0wn7w"]
+[ext_resource type="AudioStream" uid="uid://d2hmgik0iu0fq" path="res://assets/audio/lose.ogg" id="13_u41up"]
+[ext_resource type="Script" path="res://assets/scripts/screens/GameOverScreen.cs" id="14_x7oqb"]
+[ext_resource type="AudioStream" uid="uid://vtf7bacxpy4s" path="res://assets/audio/cast-time-music.ogg" id="19_76g3y"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kav8s"]
+shader = ExtResource("3_g8xuf")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lymdr"]
+texture = ExtResource("2_f25os")
+0:0/0 = 0
+0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_0/angular_velocity = 0.0
+1:0/0 = 0
+1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:0/0/physics_layer_0/angular_velocity = 0.0
+0:1/0 = 0
+0:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:1/0/physics_layer_0/angular_velocity = 0.0
+1:1/0 = 0
+1:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:1/0/physics_layer_0/angular_velocity = 0.0
+0:2/0 = 0
+0:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:2/0/physics_layer_0/angular_velocity = 0.0
+1:2/0 = 0
+1:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:2/0/physics_layer_0/angular_velocity = 0.0
+1:3/0 = 0
+1:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:3/0/physics_layer_0/angular_velocity = 0.0
+1:4/0 = 0
+1:4/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:4/0/physics_layer_0/angular_velocity = 0.0
+0:4/0 = 0
+0:4/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:4/0/physics_layer_0/angular_velocity = 0.0
+0:3/0 = 0
+0:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:3/0/physics_layer_0/angular_velocity = 0.0
+
+[sub_resource type="TileSet" id="TileSet_hr412"]
+physics_layer_0/collision_layer = 1
+sources/2 = SubResource("TileSetAtlasSource_lymdr")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_scog3"]
+size = Vector2(192, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6nscb"]
+size = Vector2(192, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yax88"]
+size = Vector2(16, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8re5c"]
+size = Vector2(16, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_42eyd"]
+size = Vector2(8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ortlx"]
+atlas = ExtResource("5_agoc4")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2bur1"]
+atlas = ExtResource("5_agoc4")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8nwfm"]
+atlas = ExtResource("5_agoc4")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hskgh"]
+atlas = ExtResource("5_agoc4")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l658s"]
+atlas = ExtResource("5_agoc4")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m20p2"]
+atlas = ExtResource("5_agoc4")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_082i3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ortlx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2bur1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8nwfm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hskgh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l658s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m20p2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nylre"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pc0ah"]
+
+[sub_resource type="Theme" id="Theme_5jyfx"]
+
+[node name="Game" type="Node2D" node_paths=PackedStringArray("introScreen", "levelScreen", "gameOverScreen")]
+texture_filter = 1
+texture_repeat = 2
+script = ExtResource("8_b4qfm")
+introScreen = NodePath("IntroScreen")
+levelScreen = NodePath("LevelScreen")
+gameOverScreen = NodePath("GameOverScreen")
+
+[node name="Background" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_kav8s")
+scale = Vector2(17, 17)
+texture = ExtResource("1_mgeco")
+centered = false
+
+[node name="IntroScreen" type="Node2D" parent="." node_paths=PackedStringArray("title", "brief")]
+script = ExtResource("4_brr3i")
+title = NodePath("Title")
+brief = NodePath("Brief")
+
+[node name="Title" type="Node2D" parent="IntroScreen"]
+
+[node name="Sprite2D" type="Sprite2D" parent="IntroScreen/Title"]
+position = Vector2(136, 56)
+texture = ExtResource("3_f5px6")
+
+[node name="Brief" type="Node2D" parent="IntroScreen"]
+visible = false
+
+[node name="Label2" type="Label" parent="IntroScreen/Brief"]
+offset_top = 24.0
+offset_right = 272.0
+offset_bottom = 192.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_ae47x")
+text = "You've been hired as the mages' backend for their summoning spells. 
+Route the monster through the mage's portal before their casting time expires. 
+You have 5 chances. 
+
+
+Use the arrow keys to move."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Label2" type="Label" parent="IntroScreen"]
+offset_top = 208.0
+offset_right = 272.0
+offset_bottom = 272.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_ae47x")
+text = "PRESS SPACE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelScreen" type="Node2D" parent="." node_paths=PackedStringArray("gameTimer", "player", "level", "winSound", "timeoutSound", "timerLabel", "scoreLabel", "strikesLabel")]
+process_mode = 4
+visible = false
+script = ExtResource("6_mm0xu")
+gameTimer = NodePath("Timer")
+player = NodePath("Player")
+level = NodePath("Level")
+winSound = NodePath("Sound/WinSound")
+timeoutSound = NodePath("Sound/TimeoutSound")
+timerLabel = NodePath("UserInterface/CastTime")
+scoreLabel = NodePath("UserInterface/Score")
+strikesLabel = NodePath("UserInterface/Strikes")
+
+[node name="TileMap" type="TileMap" parent="LevelScreen"]
+clip_children = 2
+light_mask = 1023
+visibility_layer = 31
+position = Vector2(56, 80)
+tile_set = SubResource("TileSet_hr412")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 2, 0, 65536, 2, 0, 131072, 2, 0, 131073, 2, 0, 65537, 2, 0, 1, 2, 0, 2, 2, 0, 65538, 2, 0, 131074, 2, 0, 3, 2, 0, 4, 2, 0, 5, 2, 0, 6, 2, 0, 7, 2, 0, 8, 2, 0, 196608, 2, 0, 262144, 2, 0, 327680, 2, 0, 393216, 2, 0, 458752, 2, 0, 524288, 2, 0, 524289, 2, 0, 524290, 2, 0, 524291, 2, 0, 524292, 2, 0, 524293, 2, 0, 524294, 2, 0, 524295, 2, 0, 524296, 2, 0, 458760, 2, 0, 393224, 2, 0, 327688, 2, 0, 262152, 2, 0, 196616, 2, 0, 131080, 2, 0, 65544, 2, 0, 65543, 2, 0, 65542, 2, 0, 65541, 2, 0, 65540, 2, 0, 65539, 2, 0, 131075, 2, 0, 131076, 2, 0, 131077, 2, 0, 131078, 2, 0, 131079, 2, 0, 196615, 2, 0, 196614, 2, 0, 196613, 2, 0, 196612, 2, 0, 196611, 2, 0, 196610, 2, 0, 196609, 2, 0, 262145, 2, 0, 262146, 2, 0, 262147, 2, 0, 262148, 2, 0, 262149, 2, 0, 262150, 2, 0, 262151, 2, 0, 327687, 2, 0, 327686, 2, 0, 327685, 2, 0, 327684, 2, 0, 327683, 2, 0, 327682, 2, 0, 327681, 2, 0, 393217, 2, 0, 393218, 2, 0, 393219, 2, 0, 393220, 2, 0, 393221, 2, 0, 393222, 2, 0, 393223, 2, 0, 458759, 2, 0, 458758, 2, 0, 458757, 2, 0, 458756, 2, 0, 458755, 2, 0, 458754, 2, 0, 458753, 2, 0, 589824, 2, 0, 589825, 2, 0, 589826, 2, 0, 589827, 2, 0, 589828, 2, 0, 589829, 2, 0, 589830, 2, 0, 589831, 2, 0, 589832, 2, 0, 589833, 2, 0, 9, 2, 0, 65545, 2, 0, 131081, 2, 0, 196617, 2, 0, 262153, 2, 0, 327689, 2, 0, 393225, 2, 0, 458761, 2, 0, 524297, 2, 0, 10, 2, 0, 65546, 2, 0, 131082, 2, 0, 196618, 2, 0, 262154, 2, 0, 327690, 2, 0, 393226, 2, 0, 458762, 2, 0, 524298, 2, 0, 589834, 2, 0, 65535, 2, 0, 131071, 2, 0, 196607, 2, 0, 262143, 2, 0, 327679, 2, 0, 393215, 2, 0, 458751, 2, 0, 524287, 2, 0, 589823, 2, 0, 655359, 2, 0, -2, 2, 1, -65525, 65538, 1, 655371, 65538, 2, 720894, 2, 2, 655358, 2, 3, 589822, 2, 3, 524286, 2, 3, 458750, 2, 3, 393214, 2, 3, 327678, 2, 3, 262142, 2, 3, 196606, 2, 3, 131070, 2, 3, 65534, 2, 3, -1, 2, 4, -65536, 2, 4, -65535, 2, 4, -65534, 2, 4, -65533, 2, 4, -65532, 2, 4, -65531, 2, 4, -65530, 2, 4, -65529, 2, 4, -65528, 2, 4, -65527, 2, 4, -65526, 2, 4, 11, 65538, 3, 65547, 65538, 3, 131083, 65538, 3, 196619, 65538, 3, 262155, 65538, 3, 327691, 65538, 3, 393227, 65538, 3, 458763, 65538, 3, 524299, 65538, 3, 589835, 65538, 3, 720895, 65538, 4, 655360, 65538, 4, 655361, 65538, 4, 655362, 65538, 4, 655363, 65538, 4, 655364, 65538, 4, 655365, 65538, 4, 655366, 65538, 4, 655367, 65538, 4, 655368, 65538, 4, 655369, 65538, 4, 655370, 65538, 4)
+
+[node name="GameBounds" type="Node2D" parent="LevelScreen"]
+position = Vector2(-8, 16)
+
+[node name="Top" type="Area2D" parent="LevelScreen/GameBounds"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LevelScreen/GameBounds/Top"]
+position = Vector2(144, 56)
+shape = SubResource("RectangleShape2D_scog3")
+
+[node name="Bottom" type="Area2D" parent="LevelScreen/GameBounds"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LevelScreen/GameBounds/Bottom"]
+position = Vector2(144, 232)
+shape = SubResource("RectangleShape2D_6nscb")
+
+[node name="Left" type="Area2D" parent="LevelScreen/GameBounds"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LevelScreen/GameBounds/Left"]
+position = Vector2(40, 144)
+shape = SubResource("RectangleShape2D_yax88")
+
+[node name="Right" type="Area2D" parent="LevelScreen/GameBounds"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LevelScreen/GameBounds/Right"]
+position = Vector2(248, 144)
+shape = SubResource("RectangleShape2D_8re5c")
+
+[node name="Portal" type="Area2D" parent="LevelScreen"]
+position = Vector2(216, 80)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LevelScreen/Portal"]
+position = Vector2(12, 4)
+shape = SubResource("RectangleShape2D_42eyd")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="LevelScreen/Portal"]
+sprite_frames = SubResource("SpriteFrames_082i3")
+autoplay = "default"
+frame = 3
+frame_progress = 0.0302432
+centered = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="LevelScreen/Portal/AnimatedSprite2D"]
+
+[node name="Block" type="Area2D" parent="LevelScreen"]
+position = Vector2(-40, -8)
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LevelScreen/Block"]
+position = Vector2(8, 8)
+shape = SubResource("RectangleShape2D_nylre")
+
+[node name="Sprite2D" type="Sprite2D" parent="LevelScreen/Block"]
+texture = ExtResource("6_c1jvp")
+centered = false
+
+[node name="Level" type="Node2D" parent="LevelScreen" node_paths=PackedStringArray("blockTemplate")]
+position = Vector2(56, 80)
+script = ExtResource("6_2vxaq")
+levelSize = Vector2(10, 10)
+blockTemplate = NodePath("../Block")
+
+[node name="Player" type="Area2D" parent="LevelScreen" node_paths=PackedStringArray("levelScreenRef", "collisionTest", "Collider", "moveSound")]
+position = Vector2(40, 224)
+script = ExtResource("1_bym5b")
+levelScreenRef = NodePath("..")
+moveSpeed = 150.0
+collisionTest = NodePath("RayCast2D")
+Collider = NodePath("CollisionShape2D")
+moveSound = NodePath("MoveSound")
+
+[node name="Sprite2D" type="Sprite2D" parent="LevelScreen/Player"]
+texture = ExtResource("3_ijoef")
+centered = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LevelScreen/Player"]
+position = Vector2(8, 8)
+scale = Vector2(0.75, 0.75)
+shape = SubResource("RectangleShape2D_pc0ah")
+
+[node name="RayCast2D" type="RayCast2D" parent="LevelScreen/Player"]
+position = Vector2(8, 8)
+target_position = Vector2(0, 0)
+collide_with_areas = true
+
+[node name="MoveSound" type="AudioStreamPlayer" parent="LevelScreen/Player"]
+stream = ExtResource("5_3s0dt")
+
+[node name="UserInterface" type="Control" parent="LevelScreen"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CastTime" type="Label" parent="LevelScreen/UserInterface"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 79.0
+offset_bottom = 27.0
+theme = SubResource("Theme_5jyfx")
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_ae47x")
+text = "Cast Time:"
+
+[node name="Score" type="Label" parent="LevelScreen/UserInterface"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 21.0
+offset_right = 59.0
+offset_bottom = 44.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_ae47x")
+text = "Streak:"
+
+[node name="Strikes" type="Label" parent="LevelScreen/UserInterface"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 38.0
+offset_right = 66.0
+offset_bottom = 61.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_ae47x")
+text = "Strikes: "
+
+[node name="Timer" type="Timer" parent="LevelScreen"]
+wait_time = 10.0
+autostart = true
+
+[node name="Sound" type="Node" parent="LevelScreen"]
+
+[node name="WinSound" type="AudioStreamPlayer" parent="LevelScreen/Sound"]
+stream = ExtResource("10_k8mqf")
+
+[node name="TimeoutSound" type="AudioStreamPlayer" parent="LevelScreen/Sound"]
+stream = ExtResource("11_0wn7w")
+
+[node name="GameOverScreen" type="Node2D" parent="." node_paths=PackedStringArray("inputTimer", "runScoreLabel", "overallScoreLabel", "inputLabel", "loseSound")]
+process_mode = 4
+visible = false
+script = ExtResource("14_x7oqb")
+inputTimer = NodePath("InputTimer")
+runScoreLabel = NodePath("UserInterface/HighestScore/RunScore")
+overallScoreLabel = NodePath("UserInterface/HighestScore/OverallScore")
+inputLabel = NodePath("UserInterface/Label2")
+loseSound = NodePath("Sound/LoseSound")
+
+[node name="UserInterface" type="Control" parent="GameOverScreen"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="GameOverScreen/UserInterface"]
+layout_mode = 0
+offset_right = 272.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_ae47x")
+text = "FIRED"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="GameOverScreen/UserInterface"]
+layout_mode = 0
+offset_top = 208.0
+offset_right = 272.0
+offset_bottom = 272.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_ae47x")
+text = "TRY AGAIN
+PRESS SPACE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HighestScore" type="Label" parent="GameOverScreen/UserInterface"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 56.0
+offset_right = 189.0
+offset_bottom = 79.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_ae47x")
+text = "Highest Streak
+"
+
+[node name="RunScore" type="Label" parent="GameOverScreen/UserInterface/HighestScore"]
+layout_mode = 0
+offset_left = -40.0
+offset_top = 24.0
+offset_right = 36.0
+offset_bottom = 47.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_ae47x")
+text = "This Run: "
+
+[node name="OverallScore" type="Label" parent="GameOverScreen/UserInterface/HighestScore"]
+layout_mode = 0
+offset_left = -40.0
+offset_top = 48.0
+offset_right = 73.0
+offset_bottom = 71.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_ae47x")
+text = "Overall: "
+
+[node name="Sound" type="Node" parent="GameOverScreen"]
+
+[node name="LoseSound" type="AudioStreamPlayer" parent="GameOverScreen/Sound"]
+stream = ExtResource("13_u41up")
+volume_db = -3.0
+
+[node name="InputTimer" type="Timer" parent="GameOverScreen"]
+wait_time = 4.0
+
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("19_76g3y")
+volume_db = -9.0
+autoplay = true
